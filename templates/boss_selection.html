@@ -1,0 +1,54 @@
+{% extends "shared/layout.html" %}
+
+{% block title %}Boss Selection{% endblock %}
+{% block content %}
+<div class="container text-center mt-3">
+  <div class="row">
+    <div class="col text-start">
+      <h3><a href="/index" class="text-decoration-none text-warning">GO BACK</a></h3>
+    </div>
+    <div class="col">
+      <h1 class="text-center text-warning">Boss Selection</h1>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+
+<div class="container mt-3">
+  {% for bossName,bossEncounterId,bossDifficulty,bossStartTime,bossEndTime,kill,time,averageItemLevel in zip
+  (boss_name_list,boss_encounter_id_list,boss_difficulty_list,boss_start_time_list,boss_end_time_list,boss_kill_list,time_list,average_item_level_list)
+  %}
+  <div class="card mb-3" id="card-color">
+    <div class="card-body">
+      <h5 class="card-title">{{bossDifficulty}} {{bossName}}</h5>
+      <form method='POST' action="/boss-selection">
+        <input type="hidden" id="bossName" name="bossName" value="{{bossName}}">
+        <input type="hidden" id="bossEncounterId" name="bossEncounterId" value={{bossEncounterId}}>
+        <input type="hidden" id="bossDifficulty" name="bossDifficulty" value={{bossDifficulty}}>
+        <input type="hidden" id="bossStartTime" name="bossStartTime" value={{bossStartTime}}>
+        <input type="hidden" id="bossEndTime" name="bossEndTime" value={{bossEndTime}}>
+        <input type="hidden" id="time" name="time" value={{time}}>
+        <input type="hidden" id="averageItemLevel" name="averageItemLevel" value={{averageItemLevel}}>
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-outline-warning">
+            <div class="row">
+              <div class="col text-start">
+                {% if kill == true %}
+                Kill
+                {% elif kill == false %}
+                No Kill
+                {% endif %}
+              </div>
+              <div class="col text-end">
+                {{time}}
+              </div>
+            </div>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

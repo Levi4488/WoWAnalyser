@@ -1,0 +1,548 @@
+{% extends "shared/layout.html" %}
+
+{% block title %}Retribution Paladin Overview{% endblock %}
+{% block content %}
+<div class="container mt-3">
+  <div class="row border-bottom pb-3">
+    <div class="col text-start">
+      <h6>{{boss_difficulty}}</h6>
+      <h2 class="text-warning">{{boss_name}}</h2>
+    </div>
+    <div class="col text-end">
+      <h6>{{player_spec}} {{player_type}} <img src="/static/img/paladin_retribution.jpg" id="thumbnail"></h6>
+      <h2 class="text-warning">{{player_name}}</h2>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-3 border-bottom pb-3">
+  <ul class="nav nav-pills nav-fill">
+    <li class="nav-item">
+      <a class="nav-link active text-bg-warning" aria-current="page" href="/retribution-overview">Overview</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/retribution-statistics">Statistics</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/retribution-timeline">Timeline</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/retribution-character">Character</a>
+    </li>
+  </ul>
+</div>
+
+<div class="container mt-3">
+  <h1 class="text-warning">CHECKLIST</h1>
+</div>
+
+<div class="container mt-3">
+  <div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingOne">
+        {% if active_time_percent >= 50 %}
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+          aria-expanded="false" aria-controls="collapseOne">
+          {% elif active_time_percent < 50 %} <button class="accordion-button" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            {% endif %}
+            {% if active_time_percent >= 50 %}
+            <i id="icon" class="fa-solid fa-circle-check"></i>
+            {% elif active_time_percent < 50 %} <i id="icon" class="fa-regular fa-circle"></i>
+              {% endif %}
+              <h4 class="ms-2">Always be casting</h4>
+              {% if active_time_percent >= 50 %}
+              <div class="progress" id="accordion-header-progress-bar" role="progressbar" aria-label="Success example"
+                aria-valuenow="{{active_time_percent}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{active_time_percent}}%"></div>
+              </div>
+              {% elif active_time_percent < 50 %} <div class="progress" id="accordion-header-progress-bar"
+                role="progressbar" aria-label="Danger example" aria-valuenow="{{active_time_percent}}" aria-valuemin="0"
+                aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{active_time_percent}}%"></div>
+    </div>
+    {% endif %}
+    </button>
+    </h2>
+    {% if active_time_percent >= 50 %}
+    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne">
+      {% elif active_time_percent < 50 %} <div id="collapseOne" class="accordion-collapse collapse show"
+        aria-labelledby="headingOne">
+        {% endif %}
+        <div class="accordion-body">
+          <div class="row">
+            <div class="col-3">
+              <p>Active time casting</p>
+            </div>
+            <div class="col-1">
+              <p>{{active_time_percent}}%</p>
+            </div>
+            <div class="col">
+              {% if active_time_percent >= 50 %}
+              <div class="progress mt-1" id="progress-bar" role="progressbar" aria-label="Success example"
+                aria-valuenow="{{active_time_percent}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{active_time_percent}}%"></div>
+              </div>
+              {% elif active_time_percent < 50 %} <div class="progress mt-1" id="progress-bar" role="progressbar"
+                aria-label="Danger example" aria-valuenow="{{active_time_percent}}" aria-valuemin="0"
+                aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{active_time_percent}}%"></div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingTwo">
+    {% if short_cooldowns >= 50 %}
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+      aria-expanded="false" aria-controls="collapseTwo">
+      {% elif short_cooldowns < 50 %} <button class="accordion-button" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+        {% endif %}
+        {% if short_cooldowns >= 50 %}
+        <i id="icon" class="fa-solid fa-circle-check"></i>
+        {% elif short_cooldowns < 50 %} <i id="icon" class="fa-regular fa-circle"></i>
+          {% endif %}
+          <h4 class="ms-2">Use core abilities</h4>
+          {% if short_cooldowns >= 50 %}
+          <div class="progress" id="accordion-header-progress-bar" role="progressbar" aria-label="Success example"
+            aria-valuenow="{{short_cooldowns}}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar bg-success" style="width: {{short_cooldowns}}%"></div>
+          </div>
+          {% elif short_cooldowns < 50 %} <div class="progress" id="accordion-header-progress-bar" role="progressbar"
+            aria-label="Danger example" aria-valuenow="{{short_cooldowns}}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar bg-danger" style="width: {{short_cooldowns}}%"></div>
+</div>
+{% endif %}
+</button>
+</h2>
+{% if short_cooldowns >= 50 %}
+<div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo">
+  {% elif short_cooldowns < 50 %} <div id="collapseTwo" class="accordion-collapse collapse show"
+    aria-labelledby="headingTwo">
+    {% endif %}
+    <div class="accordion-body">
+      <p>Spells with short cooldowns such as Judgment, Blade of Justice and Consecration should be
+        used
+        often.</p>
+      <div class="row">
+      <div class="col-3">
+        <p><img src="/static/img/spell_holy_righteousfury.jpg" id="thumbnail"> Judgment</p>
+      </div>
+      <div class="col-1">
+        <p>{{judgment_efficiency}}%</p>
+      </div>
+      <div class="col">
+        {% if judgment_efficiency >= 50 %}
+        <div class="progress mt-1" id="progress-bar" role="progressbar" aria-label="Success example"
+          aria-valuenow="{{judgment_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-bar bg-success" style="width: {{judgment_efficiency}}%"></div>
+        </div>
+        {% elif judgment_efficiency < 50 %} <div class="progress mt-1" id="progress-bar" role="progressbar"
+          aria-label="Danger example" aria-valuenow="{{judgment_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-bar bg-danger" style="width: {{judgment_efficiency}}%"></div>
+      </div>
+      {% endif %}
+    </div>
+    <div class="col-3">
+      <p><img src="/static/img/ability_paladin_bladeofjustice.jpg" id="thumbnail"> Blade of
+        Justice
+      </p>
+    </div>
+    <div class="col-1">
+      <P>{{blade_of_justice_efficiency}}%</P>
+    </div>
+    <div class="col">
+      {% if blade_of_justice_efficiency >= 50 %}
+      <div class="progress mt-1" id="progress-bar" role="progressbar" aria-label="Success example"
+        aria-valuenow="{{blade_of_justice_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar bg-success" style="width: {{blade_of_justice_efficiency}}%"></div>
+      </div>
+      {% elif blade_of_justice_efficiency < 50 %} <div class="progress mt-1" id="progress-bar" role="progressbar"
+        aria-label="Danger example" aria-valuenow="{{blade_of_justice_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar bg-danger" style="width: {{blade_of_justice_efficiency}}%"></div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+<div class="row">
+<div class="col-3">
+  <p><img src="/static/img/spell_holy_innerfire.jpg" style="width: 25px; height: 25px;"> Consecration</p>
+</div>
+<div class="col-1">{{consecration_efficiency}}%</div>
+<div class="col">
+  {% if consecration_efficiency >= 50 %}
+  <div class="progress mt-1" id="progress-bar" role="progressbar" aria-label="Success example"
+    aria-valuenow="{{consecration_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar bg-success" style="width: {{consecration_efficiency}}%"></div>
+  </div>
+  {% elif consecration_efficiency < 50 %} <div class="progress mt-1" id="progress-bar" role="progressbar"
+    aria-label="Danger example" aria-valuenow="{{consecration_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar bg-danger" style="width: {{consecration_efficiency}}%"></div>
+</div>
+{% endif %}
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingThree">
+    {% if long_cooldowns >= 50 %}
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree"
+      aria-expanded="false" aria-controls="collapseThree">
+      {% elif long_cooldowns < 50 %} <button class="accordion-button" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+        {% endif %}
+        {% if long_cooldowns >= 50 %}
+        <i id="icon" class="fa-solid fa-circle-check"></i>
+        {% elif long_cooldowns < 50 %} <i id="icon" class="fa-regular fa-circle"></i>
+          {% endif %}
+          <h4 class="ms-2">Use your cooldowns</h4>
+          {% if long_cooldowns >= 50 %}
+          <div class="progress" id="accordion-header-progress-bar" role="progressbar" aria-label="Success example"
+            aria-valuenow="{{long_cooldowns}}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar bg-success" style="width: {{long_cooldowns}}%"></div>
+          </div>
+          {% elif long_cooldowns < 50 %} <div class="progress" id="accordion-header-progress-bar" role="progressbar"
+            aria-label="Danger example" aria-valuenow="{{long_cooldowns}}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar bg-danger" style="width: {{long_cooldowns}}%"></div>
+</div>
+{% endif %}
+</button>
+</h2>
+{% if long_cooldowns >= 50 %}
+<div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree">
+  {% elif long_cooldowns < 50 %} <div id="collapseThree" class="accordion-collapse collapse show"
+    aria-labelledby="headingThree">
+    {% endif %}
+    <div class="accordion-body">
+      <div class="row">
+        <div class="col-6">
+          <h6><img src="/static/img/spell_holy_avenginewrath.jpg" id="thumbnail"> Avenging Wrath</h6>
+          <div class="row">
+            <div class="col">
+              <p>Avenging Wrath</p>
+            </div>
+            <div class="col"><p>{{avenging_wrath_efficiency}}%</p></div>
+            <div class="col">
+              {% if avenging_wrath_efficiency >= 50 %}
+              <div class="progress mt-1" id="progress-bar" role="progressbar" aria-label="Success example"
+                aria-valuenow="{{avenging_wrath_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{avenging_wrath_efficiency}}%"></div>
+              </div>
+              {% elif avenging_wrath_efficiency < 50 %} <div class="progress mt-1" id="progress-bar" role="progressbar"
+                aria-label="Danger example" aria-valuenow="{{avenging_wrath_efficiency}}" aria-valuemin="0"
+                aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{avenging_wrath_efficiency}}%"></div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-4"><p>Active Uptime</p></div>
+          <div class="col-1"><p>{{avenging_wrath_uptime_perc}}%</p></div>
+        </div>
+      </div>
+      <div class="col-6">
+        <h6><img src="/static/img/inv_sword_2h_artifactashbringerfire_d_03.jpg" id="thumbnail"> Wake of Ashes</h6>
+        <div class="row">
+          <div class="col">
+            <p>Wake of Ashes</p>
+          </div>
+          <div class="col">
+            <p>{{wake_of_ashes_efficiency}}%</p>
+          </div>
+          <div class="col">
+            {% if wake_of_ashes_efficiency >= 50 %}
+            <div class="progress mt-1" id="progress-bar" role="progressbar" aria-label="Success example"
+              aria-valuenow="{{wake_of_ashes_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar bg-success" style="width: {{wake_of_ashes_efficiency}}%"></div>
+            </div>
+            {% elif wake_of_ashes_efficiency < 50 %} <div class="progress mt-1" id="progress-bar" role="progressbar"
+              aria-label="Danger example" aria-valuenow="{{wake_of_ashes_efficiency}}" aria-valuemin="0"
+              aria-valuemax="100">
+              <div class="progress-bar bg-danger" style="width: {{wake_of_ashes_efficiency}}%"></div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingFour">
+    {% if buffs_active >= 50 %}
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour"
+      aria-expanded="false" aria-controls="collapseFour">
+      {% elif buffs_active < 50 %} <button class="accordion-button" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+        {% endif %}
+        {% if buffs_active >= 50 %}
+        <i id="icon" class="fa-solid fa-circle-check"></i>
+        {% elif buffs_active < 50 %} <i id="icon" class="fa-regular fa-circle"></i>
+          {% endif %}
+          <h4 class="ms-2">Use buffs efficiently</h4>
+          {% if buffs_active >= 50 %}
+          <div class="progress" id="accordion-header-progress-bar" role="progressbar" aria-label="Success example"
+            aria-valuenow="{{buffs_active}}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar bg-success" style="width: {{buffs_active}}%"></div>
+          </div>
+          {% elif buffs_active < 50 %} <div class="progress" id="accordion-header-progress-bar" role="progressbar"
+            aria-label="Danger example" aria-valuenow="{{buffs_active}}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar bg-danger" style="width: {{buffs_active}}%"></div>
+</div>
+{% endif %}
+</button>
+</h2>
+{% if buffs_active >= 50 %}
+<div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour">
+  {% elif buffs_active < 50 %} <div id="collapseFour" class="accordion-collapse collapse show"
+    aria-labelledby="headingFour">
+    {% endif %}
+    <div class="accordion-body">
+      <div class="row">
+      <div class="col-6">
+        <h6><img src="/static/img/spell_paladin_lightofdawn.jpg" id="thumbnail"> Of Dusk and Dawn</h6>
+        <div class="row">
+          <div class="col">
+        <p>Blessing of Dawn Uptime</p>
+      </div>
+      <div class="col">
+        <p>{{blessing_of_dawn_uptime_perc}}%</p>
+      </div>
+      </div>
+        <div class="row">
+          <div class="col">
+            <p>Blessing of Dusk Uptime</p>
+          </div>
+          <div class="col">
+            <p>{{blessing_of_dusk_uptime_perc}}%</p>
+          </div>
+      </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingFive">
+    {% if utility_defensive_spells >= 50 %}
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive"
+      aria-expanded="false" aria-controls="collapseFive">
+      {% elif utility_defensive_spells < 50 %} <button class="accordion-button" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+        {% endif %}
+        {% if utility_defensive_spells >= 50 %}
+        <i id="icon" class="fa-solid fa-circle-check"></i>
+        {% elif utility_defensive_spells < 50 %} <i id="icon" class="fa-regular fa-circle"></i>
+          {% endif %}
+          <h4 class="ms-2">Use your utility and defensive spells</h4>
+          {% if utility_defensive_spells >= 50 %}
+          <div class="progress" id="accordion-header-progress-bar" role="progressbar" aria-label="Success example"
+            aria-valuenow="{{utility_defensive_spells}}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar bg-success" style="width: {{utility_defensive_spells}}%"></div>
+          </div>
+          {% elif utility_defensive_spells < 50 %} <div class="progress" id="accordion-header-progress-bar"
+            role="progressbar" aria-label="Danger example" aria-valuenow="{{utility_defensive_spells}}"
+            aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar bg-danger" style="width: {{utility_defensive_spells}}%"></div>
+</div>
+{% endif %}
+</button>
+</h2>
+{% if utility_defensive_spells >= 50 %}
+<div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive">
+  {% elif utility_defensive_spells < 50 %} <div id="collapseFive" class="accordion-collapse collapse show"
+    aria-labelledby="headingFive">
+    {% endif %}
+    <div class="accordion-body">
+      <div class="row">
+        <div class="col-3">
+          <p><img src="/static/img/ability_paladin_shieldofthetemplar.jpg" id="thumbnail"> Shield of
+            Vengeance</p>
+        </div>
+        <div class="col-1">
+          <p>{{shield_of_vengeance_efficiency}}%</p>
+        </div>
+        <div class="col">
+          {% if shield_of_vengeance_efficiency >= 50 %}
+          <div class="progress mt-1" id="progress-bar" role="progressbar" aria-label="Success example"
+            aria-valuenow="{{shield_of_vengeance_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar bg-success" style="width: {{shield_of_vengeance_efficiency}}%"></div>
+          </div>
+          {% elif shield_of_vengeance_efficiency < 50 %} <div class="progress mt-1" id="progress-bar" role="progressbar"
+            aria-label="Danger example" aria-valuenow="{{shield_of_vengeance_efficiency}}" aria-valuemin="0"
+            aria-valuemax="100">
+            <div class="progress-bar bg-danger" style="width: {{shield_of_vengeance_efficiency}}%"></div>
+        </div>
+        {% endif %}
+      </div>
+      <div class="col-3">
+        <p><img src="/static/img/spell_holy_layonhands.jpg" id="thumbnail"> Lay on Hands</p>
+      </div>
+      <div class="col-1">
+        <p>{{lay_on_hands_efficiency}}%</p>
+      </div>
+      <div class="col">
+        {% if lay_on_hands_efficiency >= 50 %}
+        <div class="progress mt-1" id="progress-bar" role="progressbar" aria-label="Success example"
+          aria-valuenow="{{lay_on_hands_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-bar bg-success" style="width: {{lay_on_hands_efficiency}}%"></div>
+        </div>
+        {% elif lay_on_hands_efficiency < 50 %} <div class="progress mt-1" id="progress-bar" role="progressbar"
+          aria-label="Danger example" aria-valuenow="{{lay_on_hands_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-bar bg-danger" style="width: {{lay_on_hands_efficiency}}%"></div>
+      </div>
+      {% endif %}
+    </div>
+</div>
+</div>
+</div>
+</div>
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingSix">
+    {% if prepared_percent >= 50 %}
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix"
+      aria-expanded="false" aria-controls="collapseSix">
+      {% elif prepared_percent < 50 %} <button class="accordion-button" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
+        {% endif %}
+        {% if prepared_percent >= 50 %}
+        <i id="icon" class="fa-solid fa-circle-check"></i>
+        {% elif prepared_percent < 50 %} <i id="icon" class="fa-regular fa-circle"></i>
+          {% endif %}
+          <h4 class="ms-2">Be well prepared</h4>
+          {% if prepared_percent >= 50 %}
+          <div class="progress" id="accordion-header-progress-bar" role="progressbar" aria-label="Success example"
+            aria-valuenow="{{prepared_percent}}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar bg-success" style="width: {{prepared_percent}}%"></div>
+          </div>
+          {% elif prepared_percent < 50 %} <div class="progress" id="accordion-header-progress-bar" role="progressbar"
+            aria-label="Danger example" aria-valuenow="{{prepared_percent}}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar bg-danger" style="width: {{prepared_percent}}%"></div>
+</div>
+{% endif %}
+</button>
+</h2>
+{% if prepared_percent >= 50 %}
+<div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix">
+  {% elif prepared_percent < 50 %} <div id="collapseSix" class="accordion-collapse collapse show"
+    aria-labelledby="headingSix">
+    {% endif %}
+    <div class="accordion-body">
+      <div class="row">
+        <div class="col">
+          <p>All items enchanted</p>
+          <p>All weapons enhanced (oils/stones)</p>
+          <p>Combat Potions used</p>
+          <p>Healthstones used</p>
+        </div>
+        <div class="col">
+          <p>{{enchant_tally}}/8</p>
+          <p>{{enhanced_tally}}/1</p>
+          <p>{{player_potion_use}}</p>
+          <p>{{player_healthstone_use}}</p>
+        </div>
+        <div class="col">
+          <p>Flask used</p>
+          <p>Food used</p>
+          <p>Augment rune used</p>
+        </div>
+        <div class="col">
+          {% if flask_used == True %}
+          <p>Yes</p>
+          {% elif flask_used == False %}
+          <p>No</p>
+          {% endif %}
+          {% if food_buff == True %}
+          <p>Yes</p>
+          {% elif food_buff == False %}
+          <p>No</p>
+          {% endif %}
+          {% if weapon_enhanced == True %}
+          <p>Yes</p>
+          {% elif weapon_enhanced == False %}
+          <p>No</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="container mt-3">
+  <h1 class="text-warning">Suggestions</h1>
+</div>
+
+<div class="container mt-3">
+  {% if wake_of_ashes_efficiency < 75 %}
+  <h4><img src="/static/img/inv_sword_2h_artifactashbringerfire_d_03.jpg"
+      id="thumbnail">
+    Wake of Ashes</h4>
+    <h6>Try to cast Wake of Ashes more often. It has a high damage per execute time and generates a lot of holy power.
+    </h6>
+    <p>{{wake_of_ashes_casts}} out of {{wake_of_ashes_potential_casts}} possible casts. You kept it on cooldown
+      {{wake_of_ashes_efficiency}}% of the time.</p>
+    {% endif %}
+      {% if judgment_efficiency < 75 %}
+      <h4><img src="/static/img/spell_holy_righteousfury.jpg" id="thumbnail"> Judgment
+        </h4>
+        <h6>Try to cast Judgment more often.</h6>
+        <p>{{judgment_casts}} out of {{judgment_potential_casts}} possible casts. You kept it on cooldown
+          {{judgment_efficiency}}% of
+          the time.</p>
+        {% endif %}
+          {% if weapon_enhanced == False %}
+          <h6>Your weapon is missing a weapon enhancement (weapon oils/sharpening stone/weightstone). Apply an
+            enhancement to very easily increase your throughput
+            slightly.</h6>
+          {% endif %}
+          {% if weapon_enchant == False %}
+          <h6>Your weapon is missing an enchant. Apply a strong enchant to very easily increase your throughput
+            slightly.</h6>
+          {% endif %}
+          {% if chest_enchant == False %}
+          <h6>Your chest is missing an enchant. Apply a strong enchant to very easily increase your throughput
+            slightly.</h6>
+          {% endif %}
+          {% if legguards_enchant == False %}
+          <h6>Your legguards are missing an enchant. Apply a strong enchant to very easily increase your throughput
+            slightly.</h6>
+          {% endif %}
+          {% if boots_enchant == False %}
+          <h6>Your boots are missing an enchant. Apply a strong enchant to very easily increase your throughput
+            slightly.</h6>
+          {% endif %}
+          {% if wristguards_enchant == False %}
+          <h6>Your wristguards are missing an enchant. Apply a strong enchant to very easily increase your throughput
+            slightly.</h6>
+          {% endif %}
+          {% if ring1_enchant == False %}
+          <h6>Your ring is missing an enchant. Apply a strong enchant to very easily increase your throughput
+            slightly.</h6>
+          {% endif %}
+          {% if ring2_enchant == False %}
+          <h6>Your ring is missing an enchant. Apply a strong enchant to very easily increase your throughput
+            slightly.</h6>
+          {% endif %}
+          {% if cloak_enchant == False %}
+          <h6>Your cloak is missing an enchant. Apply a strong enchant to very easily increase your throughput
+            slightly.</h6>
+          {% endif %}
+          {% if player_potion_use == '0' %}
+          <h6>You used 0 combat potions during this encounter, but you could have used 1.</h6>
+          {% endif %}
+          {% if food_buff == False %}
+          <h6>You did not have any food active when starting the fight. Having the right food buff during combat is an
+            easy way to improve performance.</h6>
+          {% endif %}
+</div>
+{% endblock %}

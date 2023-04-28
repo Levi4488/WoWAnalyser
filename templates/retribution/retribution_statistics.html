@@ -1,0 +1,938 @@
+{% extends "shared/layout.html" %}
+
+{% block title %}Retribution Paladin Statistics{% endblock %}
+{% block content %}
+<div class="container mt-3">
+  <div class="row border-bottom pb-3">
+    <div class="col text-start">
+      <h6>{{boss_difficulty}}</h6>
+      <h2 class="text-warning">{{boss_name}}</h2>
+    </div>
+    <div class="col text-end">
+      <h6>{{player_spec}} {{player_type}} <img src="/static/img/paladin_retribution.jpg" id="thumbnail"></h6>
+      <h2 class="text-warning">{{player_name}}</h2>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-3 border-bottom pb-3">
+  <ul class="nav nav-pills nav-fill">
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/retribution-overview">Overview</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active text-bg-warning" aria-current="page" href="/retribution-statistics">Statistics</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/retribution-timeline">Timeline</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link link-light" href="/retribution-character">Character</a>
+    </li>
+  </ul>
+</div>
+
+<div class="container mt-3">
+  <h1 class="text-warning">Statistics</h1>
+</div>
+
+<div class="container mt-3">
+  <div class="row">
+    <div class="col">
+      <div class="card" id="card-color">
+        <div class="card-body">
+          <h6>Active Time</h6>
+          <h3>{{active_time_percent}}%</h3>
+          {% if active_time_percent >= 50 %}
+              <div class="progress" id="card-progress-bar" role="progressbar" aria-label="Success example" aria-valuenow="{{active_time_percent}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{active_time_percent}}%"></div>
+              </div>
+              {% elif active_time_percent < 50 %}
+              <div class="progress" id="card-progress-bar" role="progressbar" aria-label="Danger example" aria-valuenow="{{active_time_percent}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{active_time_percent}}%"></div>
+              </div>
+              {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" id="card-color">
+        <div class="card-body">
+          <h6><img src="/static/img/spell_paladin_templarsverdict.jpg" id="thumbnail"> Final Verdict Damage Done</h6>
+          <h3>{{final_verdict_damage}}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" id="card-color">
+        <div class="card-body">
+          <!-- DPS -->
+          <h3>{{damage_per_second}} DPS</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" id="card-color">
+        <div class="card-body">
+          <!-- DPS Line Graph -->
+          <canvas id="dpsChart" width="400" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <div class="card" id="card-color">
+        <div class="card-body">
+          <!-- Holy Power Per Min -->
+          <div class="row">
+            <div class="col-md-auto">
+              <img src="/static/img/achievement_bg_winsoa.jpg">
+        </div>
+        <div class="col">
+          <h3>{{holy_power_per_min}}</h3>
+          <h6>Holy Power Generated Per Minute</h6>
+        </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" id="card-color">
+        <div class="card-body">
+          <!-- Holy Power Wasted -->
+          <div class="row">
+            <div class="col-md-auto">
+              <img src="/static/img/achievement_bg_winsoa.jpg">
+            </div>
+            <div class="col">
+          <h3>{{holy_power_wasted}}</h3>
+          <h6>Holy Power Wasted</h6>
+        </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" id="card-color">
+        <div class="card-body">
+          <!-- HPS -->
+          <h3>{{heals_per_second}} HPS</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" id="card-color">
+        <div class="card-body">
+          <!-- HPS Line Graph -->
+          <canvas id="hpsChart" width="400" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <div class="card" id="card-color">
+        <div class="card-body">
+          <!-- Wake of Ashes Hit Count -->
+          <h6><img src="/static/img/inv_sword_2h_artifactashbringerfire_d_03.jpg" id="thumbnail"> Wake of Ashes Targets Hit</h6>
+          <h3>{{wake_of_ashes_hit_count}} hits</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" id="card-color">
+        <div class="card-body">
+          <!-- Avenging Wrath Uptime -->
+          <h6><img src="/static/img/spell_holy_avenginewrath.jpg" id="thumbnail"> Avenging Wrath Uptime</h6>
+          <h3>{{avenging_wrath_uptime_perc}}%</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" id="card-color">
+        <div class="card-body">
+          <!-- DTPS -->
+          <h3>{{damage_taken_per_second}} DTPS</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" id="card-color">
+        <div class="card-body">
+          <!-- DTPS Line Graph -->
+          <canvas id="dtpsChart" width="400" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-3">
+  <h1 class="text-warning">TALENTS</h1>
+</div>
+
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-md-auto">
+      <div class="card" id="card-color">
+        <div class="card-body">
+          <!-- Art of War -->
+          <h6><img src="/static/img/ability_paladin_artofwar.jpg" id="thumbnail"> Art of War</h6>
+          <h3>{{art_of_war_procs}} Procs</h3>
+          <canvas id="aowChart" width="400" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-auto">
+      <div class="card" id="card-color">
+        <div class="card-body">
+          <h6><img src="/static/img/spell_paladin_lightofdawn.jpg" id="thumbnail"> Of Dusk and Dawn</h6>
+          <div class="row">
+            <div class="col-md-auto">
+              <img src="/static/img/achievement_zone_valeofeternalblossoms.jpg">
+            </div>
+            <div class="col">
+              <h6>Blessing of Dawn Uptime</h6>
+              <h3>{{blessing_of_dawn_uptime_perc}}%</h3>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-md-auto">
+              <img src="/static/img/achievement_zone_newshadowmoonvalley.jpg">
+            </div>
+            <div class="col">
+              <h6>Blessing of Dusk Uptime</h6>
+              <h3>{{blessing_of_dusk_uptime_perc}}%</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-3">
+  <h1 class="text-warning">DETAILS</h1>
+</div>
+
+<div class="container mt-3">
+  <h1 class="text-warning">Holy Power Usage</h1>
+</div>
+
+<div class="container mt-3">
+  <table class="table table-dark table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Ability</th>
+        <th scope="col">Holy Power Generated</th>
+        <th scope="col">Holy Power Wasted</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Total</td>
+        <td>{{total_gen}}</td>
+        <td>{{holy_power_wasted}}</td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/ability_paladin_bladeofjustice.jpg" id="thumbnail"> Blade of
+          Justice</td>
+        <td>
+          <div class="row">
+            <div class="col-1">
+              {{blade_of_justice_gen}}
+            </div>
+            <div class="col">
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Warning example" aria-valuenow="{{blade_of_justice_gen_perc}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-warning" style="width: {{blade_of_justice_gen_perc}}%"></div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/inv_sword_2h_artifactashbringerfire_d_03.jpg" id="thumbnail"> Wake
+          of Ashes</td>
+        <td>
+          <div class="row">
+            <div class="col-1">
+              {{wake_of_ashes_gen}}
+            </div>
+            <div class="col">
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Warning example" aria-valuenow="{{wake_of_ashes_gen_perc}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-warning" style="width: {{wake_of_ashes_gen_perc}}%"></div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/spell_holy_righteousfury.jpg" id="thumbnail"> Judgment</td>
+        <td>
+          <div class="row">
+            <div class="col-1">
+              {{judgment_gen}}
+            </div>
+            <div class="col">
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Warning example" aria-valuenow="{{judgment_gen_perc}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-warning" style="width: {{judgment_gen_perc}}%"></div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/spell_paladin_hammerofwrath.jpg" id="thumbnail"> Hammer of Wrath</td>
+        <td>
+          <div class="row">
+            <div class="col-1">
+              {{hammer_of_wrath_casts}}
+            </div>
+            <div class="col">
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Warning example" aria-valuenow="{{hammer_of_wrath_gen_perc}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-warning" style="width: {{hammer_of_wrath_gen_perc}}%"></div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/ability_paladin_toweroflight.jpg" id="thumbnail"> Inner Grace</td>
+        <td>
+          <div class="row">
+            <div class="col-1">
+              {{inner_grace_gen}}
+            </div>
+            <div class="col">
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Warning example" aria-valuenow="{{inner_grace_gen_perc}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-warning" style="width: {{inner_grace_gen_perc}}%"></div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/inv_sword_2h_artifactashbringerpurified_d_02.jpg" id="thumbnail"> Templar Strike</td>
+        <td>
+          <div class="row">
+            <div class="col-1">
+              {{templar_strike_casts}}
+            </div>
+            <div class="col">
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Warning example" aria-valuenow="{{templar_strike_gen_perc}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-warning" style="width: {{templar_strike_gen_perc}}%"></div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/inv_sword_2h_artifactashbringerpurified_d_03.jpg" id="thumbnail"> Templar Slash</td>
+        <td>
+          <div class="row">
+            <div class="col-1">
+              {{templar_slash_casts}}
+            </div>
+            <div class="col">
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Warning example" aria-valuenow="{{templar_slash_gen_perc}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-warning" style="width: {{templar_slash_gen_perc}}%"></div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td></td>
+      </tr>
+    </tbody>
+    <thead>
+      <tr>
+        <th scope="col">Ability</th>
+        <th scope="col">Holy Power spent</th>
+        <th scope="col">Casts</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Total</td>
+        <td>{{holy_power_spent}}</td>
+        <td>{{holy_power_casts}}</td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/spell_paladin_templarsverdict.jpg" id="thumbnail"> Final Verdict</td>
+        <td>{{final_verdict_holy_power}}</td>
+        <td>{{final_verdict_casts}}</td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/ability_paladin_divinestorm.jpg" id="thumbnail"> Divine Storm</td>
+        <td>{{divine_storm_holy_power}}</td>
+        <td>{{divine_storm_casts}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="container mt-3">
+  <h1 class="text-warning">Abilities</h1>
+</div>
+
+<div class="container mt-3">
+  <table class="table table-dark table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Rotational Spell</th>
+        <th scope="col">CPM</th>
+        <th scope="col">Casts</th>
+        <th scope="col">Time on Cooldown</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><img src="/static/img/spell_paladin_hammerofwrath.jpg" id="thumbnail"> Hammer of Wrath
+        </td>
+        <td>{{hammer_of_wrath_cpm}}</td>
+        <td>{{hammer_of_wrath_casts}}/{{hammer_of_wrath_potential_casts}} casts</td>
+        <td>
+          <div class="row">
+            <div class="col">
+              {% if hammer_of_wrath_efficiency >= 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Success example" aria-valuenow="{{hammer_of_wrath_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{hammer_of_wrath_efficiency}}%"></div>
+              </div>
+              {% elif hammer_of_wrath_efficiency < 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Danger example" aria-valuenow="{{hammer_of_wrath_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{hammer_of_wrath_efficiency}}%"></div>
+              </div>
+              {% endif %}
+            </div>
+            <div class="col">
+              {{hammer_of_wrath_efficiency}}%
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/spell_holy_righteousfury.jpg" id="thumbnail"> Judgment</td>
+        <td>{{judgment_cpm}}</td>
+        <td>{{judgment_casts}}/{{judgment_potential_casts}} casts</td>
+        <td>
+          <div class="row">
+            <div class="col">
+              {% if judgment_efficiency >= 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Success example" aria-valuenow="{{judgment_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{judgment_efficiency}}%"></div>
+              </div>
+              {% elif judgment_efficiency < 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Danger example" aria-valuenow="{{judgment_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{judgment_efficiency}}%"></div>
+              </div>
+              {% endif %}
+            </div>
+            <div class="col">
+              {{judgment_efficiency}}%
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/ability_paladin_bladeofjustice.jpg" id="thumbnail"> Blade of
+          Justice</td>
+        <td>{{blade_of_justice_cpm}}</td>
+        <td>{{blade_of_justice_casts}}/{{blade_of_justice_potential_casts}} casts</td>
+        <td>
+          <div class="row">
+            <div class="col">
+              {% if blade_of_justice_efficiency >= 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Success example" aria-valuenow="{{blade_of_justice_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{blade_of_justice_efficiency}}%"></div>
+              </div>
+              {% elif blade_of_justice_efficiency < 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Danger example" aria-valuenow="{{blade_of_justice_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{blade_of_justice_efficiency}}%"></div>
+              </div>
+              {% endif %}
+            </div>
+            <div class="col">
+              {{blade_of_justice_efficiency}}%
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/spell_paladin_templarsverdict.jpg" id="thumbnail"> Final
+          Verdict</td>
+        <td>{{final_verdict_cpm}}</td>
+        <td>{{final_verdict_casts}} casts</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/ability_paladin_divinestorm.jpg" id="thumbnail"> Divine Storm</td>
+        <td>{{divine_storm_cpm}}</td>
+        <td>{{divine_storm_casts}} casts</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/inv_sword_2h_artifactashbringerpurified_d_02.jpg" id="thumbnail"> Templar Strike</td>
+        <td>{{templar_strike_cpm}}</td>
+        <td>{{templar_strike_casts}} casts</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/inv_sword_2h_artifactashbringerpurified_d_03.jpg" id="thumbnail"> Templar Slash</td>
+        <td>{{templar_slash_cpm}}</td>
+        <td>{{templar_slash_casts}} casts</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/spell_holy_innerfire.jpg" id="thumbnail"> Consecration</td>
+        <td>{{consecration_cpm}}</td>
+        <td>{{consecration_casts}}/{{consecration_potential_casts}} casts</td>
+        <td>
+          <div class="row">
+            <div class="col">
+              {% if consecration_efficiency >= 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Success example" aria-valuenow="{{consecration_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{consecration_efficiency}}%"></div>
+              </div>
+              {% elif consecration_efficiency < 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Danger example" aria-valuenow="{{consecration_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{consecration_efficiency}}%"></div>
+              </div>
+              {% endif %}
+            </div>
+            <div class="col">
+              {{consecration_efficiency}}%
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/ability_bastion_paladin.jpg" id="thumbnail"> Divine Toll</td>
+        <td>{{divine_toll_cpm}}</td>
+        <td>{{divine_toll_casts}}/{{divine_toll_potential_casts}} casts</td>
+        <td>
+          <div class="row">
+            <div class="col">
+              {% if divine_toll_efficiency >= 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Success example" aria-valuenow="{{divine_toll_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{divine_toll_efficiency}}%"></div>
+              </div>
+              {% elif divine_toll_efficiency < 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Danger example" aria-valuenow="{{divine_toll_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{divine_toll_efficiency}}%"></div>
+              </div>
+              {% endif %}
+            </div>
+            <div class="col">
+              {{divine_toll_efficiency}}%
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/spell_paladin_executionsentence.jpg" id="thumbnail"> Execution Sentence</td>
+        <td>{{execution_sentence_cpm}}</td>
+        <td>{{execution_sentence_casts}}/{{execution_sentence_potential_casts}} casts</td>
+        <td>
+          <div class="row">
+            <div class="col">
+              {% if execution_sentence_efficiency >= 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Success example" aria-valuenow="{{execution_sentence_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{execution_sentence_efficiency}}%"></div>
+              </div>
+              {% elif execution_sentence_efficiency < 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Danger example" aria-valuenow="{{execution_sentence_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{execution_sentence_efficiency}}%"></div>
+              </div>
+              {% endif %}
+            </div>
+            <div class="col">
+              {{execution_sentence_efficiency}}%
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    <thead>
+      <tr>
+        <th scope="col">Cooldown</th>
+        <th scope="col">CPM</th>
+        <th scope="col">Casts</th>
+        <th scope="col">Time on Cooldown</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><img src="/static/img/inv_sword_2h_artifactashbringerfire_d_03.jpg" id="thumbnail"> Wake
+          of Ashes</td>
+        <td>{{wake_of_ashes_cpm}}</td>
+        <td>{{wake_of_ashes_casts}}/{{wake_of_ashes_potential_casts}} casts</td>
+        <td>
+          <div class="row">
+            <div class="col">
+              {% if wake_of_ashes_efficiency >= 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Success example" aria-valuenow="{{wake_of_ashes_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{wake_of_ashes_efficiency}}%"></div>
+              </div>
+              {% elif wake_of_ashes_efficiency < 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Danger example" aria-valuenow="{{wake_of_ashes_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{wake_of_ashes_efficiency}}%"></div>
+              </div>
+              {% endif %}
+            </div>
+            <div class="col">
+              {{wake_of_ashes_efficiency}}%
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/spell_holy_avenginewrath.jpg" id="thumbnail"> Avenging Wrath</td>
+        <td>{{avenging_wrath_cpm}}</td>
+        <td>{{avenging_wrath_casts}}/{{avenging_wrath_potential_casts}} casts</td>
+        <td>
+          <div class="row">
+            <div class="col">
+              {% if avenging_wrath_efficiency >= 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Success example" aria-valuenow="{{avenging_wrath_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{avenging_wrath_efficiency}}%"></div>
+              </div>
+              {% elif avenging_wrath_efficiency < 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Danger example" aria-valuenow="{{avenging_wrath_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{avenging_wrath_efficiency}}%"></div>
+              </div>
+              {% endif %}
+            </div>
+            <div class="col">
+              {{avenging_wrath_efficiency}}%
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+
+    <thead>
+      <tr>
+        <th scope="col">Defensive Cooldown</th>
+        <th scope="col">CPM</th>
+        <th scope="col">Casts</th>
+        <th scope="col">Time on Cooldown</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><img src="/static/img/ability_paladin_shieldofthetemplar.jpg" id="thumbnail"> Shield of
+          Vengeance</td>
+        <td>{{shield_of_vengeance_cpm}}</td>
+        <td>{{shield_of_vengeance_casts}}/{{shield_of_vengeance_potential_casts}} casts</td>
+        <td>
+          <div class="row">
+            <div class="col">
+              {% if shield_of_vengeance_efficiency >= 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Success example" aria-valuenow="{{shield_of_vengeance_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{shield_of_vengeance_efficiency}}%"></div>
+              </div>
+              {% elif shield_of_vengeance_efficiency < 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Danger example" aria-valuenow="{{shield_of_vengeance_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{shield_of_vengeance_efficiency}}%"></div>
+              </div>
+              {% endif %}
+            </div>
+            <div class="col">
+              {{shield_of_vengeance_efficiency}}%
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/spell_holy_divineshield.jpg" id="thumbnail"> Divine Shield</td>
+        <td>{{divine_shield_cpm}}</td>
+        <td>{{divine_shield_casts}}/{{divine_shield_potential_casts}} casts</td>
+        <td>
+          <div class="row">
+            <div class="col">
+              {% if divine_shield_efficiency >= 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Success example" aria-valuenow="{{divine_shield_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{divine_shield_efficiency}}%"></div>
+              </div>
+              {% elif divine_shield_efficiency < 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Danger example" aria-valuenow="{{divine_shield_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{divine_shield_efficiency}}%"></div>
+              </div>
+              {% endif %}
+            </div>
+            <div class="col">
+              {{divine_shield_efficiency}}%
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/spell_holy_divineprotection.jpg" id="thumbnail"> Divine Protection</td>
+        <td>{{divine_protection_cpm}}</td>
+        <td>{{divine_protection_casts}}/{{divine_protection_potential_casts}} casts</td>
+        <td>
+          <div class="row">
+            <div class="col">
+              {% if divine_protection_efficiency >= 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Success example" aria-valuenow="{{divine_protection_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{divine_protection_efficiency}}%"></div>
+              </div>
+              {% elif divine_protection_efficiency < 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Danger example" aria-valuenow="{{divine_protection_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{divine_protection_efficiency}}%"></div>
+              </div>
+              {% endif %}
+            </div>
+            <div class="col">
+              {{divine_protection_efficiency}}%
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+
+    <thead>
+      <tr>
+        <th scope="col">Utility</th>
+        <th scope="col">CPM</th>
+        <th scope="col">Casts</th>
+        <th scope="col">Time on Cooldown</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><img src="/static/img/inv_helmet_96.jpg" id="thumbnail"> Word of Glory</td>
+        <td>{{word_of_glory_cpm}}</td>
+        <td>{{word_of_glory_casts}} casts</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/spell_holy_sealofmight.jpg" id="thumbnail"> Hammer of Justice</td>
+        <td>{{hammer_of_justice_cpm}}</td>
+        <td>{{hammer_of_justice_casts}}/{{hammer_of_justice_potential_casts}} casts</td>
+        <td>
+          <div class="row">
+            <div class="col">
+              {% if hammer_of_justice_efficiency >= 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Success example" aria-valuenow="{{hammer_of_justice_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{hammer_of_justice_efficiency}}%"></div>
+              </div>
+              {% elif hammer_of_justice_efficiency < 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Danger example" aria-valuenow="{{hammer_of_justice_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{hammer_of_justice_efficiency}}%"></div>
+              </div>
+              {% endif %}
+            </div>
+            <div class="col">
+              {{hammer_of_justice_efficiency}}%
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/spell_holy_flashheal.jpg" id="thumbnail"> Flash of Light</td>
+        <td>{{flash_of_light_cpm}}</td>
+        <td>{{flash_of_light_casts}} casts</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><img src="/static/img/spell_holy_layonhands.jpg" id="thumbnail"> Lay on Hands</td>
+        <td>{{lay_on_hands_cpm}}</td>
+        <td>{{lay_on_hands_casts}}/{{lay_on_hands_potential_casts}} casts</td>
+        <td>
+          <div class="row">
+          <div class="col">
+            {% if lay_on_hands_efficiency >= 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Success example" aria-valuenow="{{lay_on_hands_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{lay_on_hands_efficiency}}%"></div>
+              </div>
+              {% elif lay_on_hands_efficiency < 50 %}
+              <div class="progress mt-1" id="table-progress-bar" role="progressbar" aria-label="Danger example" aria-valuenow="{{lay_on_hands_efficiency}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-danger" style="width: {{lay_on_hands_efficiency}}%"></div>
+              </div>
+              {% endif %}
+          </div>
+          <div class="col">
+            {{lay_on_hands_efficiency}}%
+          </div>
+        </div>
+      </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const labels1 = [
+    {% for d in range(damage_length) %}{{ d }}, {% endfor %}
+];
+  const data1 = {
+    labels: labels1,
+    datasets: [{
+      label: 'DPS Graph',
+      data: [{% for damage in damage_graph %}{{ damage }}, {% endfor %}],
+      fill: false,
+      borderColor: '#ffc107',
+      tension: 0.1,
+}]
+};
+
+  const config1 = {
+    type: 'line',
+    data: data1,
+    options: {
+      responsive: false,
+      maintainAspectRatio: false,
+      pointStyle: false,
+      color: '#FFFFFF',
+        scales: {
+        y: {
+          ticks: { color: '#FFFFFF', beginAtZero: true },
+        },
+        x: {
+          ticks: { color: '#FFFFFF', beginAtZero: true },
+        }
+      }
+    }
+  };
+</script>
+
+<script>
+  const myChart1 = new Chart(
+    document.getElementById('dpsChart'),
+    config1
+  );
+</script>
+
+
+<script>
+  const labels2 = [
+    {% for h in range(heals_length) %}{{ h }}, {% endfor %}
+];
+  const data2 = {
+    labels: labels2,
+    datasets: [{
+      label: 'HPS Graph',
+      data: [{% for heals in heals_graph %}{{ heals }}, {% endfor %}],
+      fill: false,
+      borderColor: '#ffc107',
+      tension: 0.1
+}]
+};
+
+  const config2 = {
+    type: 'line',
+    data: data2,
+    options: {
+      responsive: false,
+      maintainAspectRatio: false,
+      pointStyle: false,
+      color: '#FFFFFF',
+        scales: {
+        y: {
+          ticks: { color: '#FFFFFF', beginAtZero: true },
+        },
+        x: {
+          ticks: { color: '#FFFFFF', beginAtZero: true },
+        }
+      }
+    }
+  };
+</script>
+
+<script>
+  const myChart2 = new Chart(
+    document.getElementById('hpsChart'),
+    config2
+  );
+</script>
+
+
+<script>
+  const labels3 = [
+    {% for dt in range(dtps_length) %}{{ dt }}, {% endfor %}
+];
+  const data3 = {
+    labels: labels3,
+    datasets: [{
+      label: 'DTPS Graph',
+      data: [{% for damageTaken in dtps_graph %}{{ damageTaken }}, {% endfor %}],
+      fill: false,
+      borderColor: '#ffc107',
+      tension: 0.1
+}]
+};
+
+  const config3 = {
+    type: 'line',
+    data: data3,
+    options: {
+      responsive: false,
+      maintainAspectRatio: false,
+      pointStyle: false,
+      color: '#FFFFFF',
+        scales: {
+        y: {
+          ticks: { color: '#FFFFFF', beginAtZero: true },
+        },
+        x: {
+          ticks: { color: '#FFFFFF', beginAtZero: true },
+        }
+      }
+    }
+  };
+</script>
+
+<script>
+  const myChart3 = new Chart(
+    document.getElementById('dtpsChart'),
+    config3
+  );
+</script>
+
+<script>
+  const labels4 = [
+    0, 1, 2, 3, 4, 5
+  ];
+  const data4 = {
+    labels: labels4,
+    datasets: [{
+      label: 'Art of War proc chance in percentage',
+      data: [{{art_of_war_chance0}}, {{art_of_war_chance1}}, {{art_of_war_chance2}}, {{art_of_war_chance3}}, {{art_of_war_chance4}}, {{art_of_war_chance5}}],
+      fill: false,
+      borderColor: '#ffc107',
+      tension: 0.1
+}]
+};
+  const config4 = {
+    type: 'line',
+    data: data4,
+    options: {
+      responsive: false,
+      maintainAspectRatio: false,
+      color: '#FFFFFF',
+        scales: {
+        y: {
+          ticks: { color: '#FFFFFF', beginAtZero: true },
+        },
+        x: {
+          ticks: { color: '#FFFFFF', beginAtZero: true },
+        }
+      }
+    }
+  };
+</script>
+
+<script>
+  const myChart4 = new Chart(
+    document.getElementById('aowChart'),
+    config4
+  );
+</script>
+{% endblock %}

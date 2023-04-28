@@ -1,0 +1,21 @@
+{% extends "shared/layout.html" %}
+
+{% block title %}Index{% endblock %}
+{% block content %}
+<div class="container mt-3">
+  <h1 class="text-warning d-flex justify-content-center">WoWAnalyser</h1>
+</div>
+
+<div class="container mt-3">
+  <form method='POST' action="/index" class="row g-2 d-flex justify-content-center">
+    <label for="reportCode" class="form-label d-flex justify-content-center">Improve your performance with personal feedback and statistics. Enter your Warcraft Logs report code below.</label>
+    <div class="col-auto">
+      <input type="text" class="form-control" id="reportCode" name="reportCode" style="width:400px" placeholder="<report code>"
+        required>
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-warning">Analyse</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

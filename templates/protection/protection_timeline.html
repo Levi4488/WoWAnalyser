@@ -1,0 +1,119 @@
+{% extends "shared/layout.html" %}
+
+{% block title %}Protection Paladin Timeline{% endblock %}
+{% block content %}
+<div class="container mt-3">
+    <div class="row border-bottom pb-3">
+      <div class="col text-start">
+        <h6>{{boss_difficulty}}</h6>
+        <h2 class="text-warning">{{boss_name}}</h2>
+      </div>
+      <div class="col text-end">
+        <h6>{{player_spec}} {{player_type}} <img src="/static/img/ability_paladin_shieldofthetemplar.jpg" id="thumbnail"></h6>
+        <h2 class="text-warning">{{player_name}}</h2>
+      </div>
+    </div>
+  </div>
+
+<div class="container mt-3 border-bottom pb-3">
+    <ul class="nav nav-pills nav-fill">
+        <li class="nav-item">
+            <a class="nav-link link-light" href="/protection-overview">Overview</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link link-light" href="/protection-statistics">Statistics</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active text-bg-warning" aria-current="page" href="/protection-timeline">Timeline</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link link-light" href="/protection-character">Character</a>
+        </li>
+    </ul>
+</div>
+
+<div class="container mt-3">
+    <div id="visualization">
+    </div>
+</div>
+
+<script type="text/javascript">
+    // DOM element where the Timeline will be attached
+    var container = document.getElementById('visualization');
+
+    // Create a DataSet (allows two way data-binding)
+    var items = new vis.DataSet([
+        {% for names, timestamp in zip(name_list, timestamp_list) %}
+    { content: '{{names}}', start: '{{timestamp}}', className: "charcoal" },
+    {% endfor %}
+    ]);
+
+    // Configuration for the Timeline
+    var options = {
+        showMajorLabels: false,
+        format: {
+            minorLabels: {
+                second: 'mm:ss',
+            }
+        },
+        maxHeight: '300px',
+    };
+
+    // Create a Timeline
+    var timeline = new vis.Timeline(container, items, options);
+</script>
+
+<div class="container mt-3" id="abilityTimeline" style="height: 400px;"></div>
+
+<script type="text/javascript">
+    google.charts.load("current", { packages: ["timeline"] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+
+        var container = document.getElementById('abilityTimeline');
+        var chart = new google.visualization.Timeline(container);
+        var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn({ type: 'string', id: 'Position' });
+        dataTable.addColumn({ type: 'string', id: 'Name' });
+        dataTable.addColumn({ type: 'date', id: 'Start' });
+        dataTable.addColumn({ type: 'date', id: 'End' });
+        dataTable.addRows([
+            {% for judgmentStart, judgmentEnd in zip(judgment_start_time_list, judgment_end_time_list) %}
+    ['Judgment', 'Cooldown', new Date({{ judgmentStart }}), new Date({{ judgmentEnd }})],
+        {% endfor %}
+    {% for avengersShieldStart, avengersShieldEnd in zip(avengers_shield_start_time_list, avengers_shield_end_time_list) %}
+    ['Avengers Shield', 'Cooldown', new Date({{ avengersShieldStart }}), new Date({{ avengersShieldEnd }})],
+        {% endfor %}
+    {% for consecrationStart, consecrationEnd in zip(consecration_start_time_list, consecration_end_time_list) %}
+    ['Consecration', 'Cooldown', new Date({{ consecrationStart }}), new Date({{ consecrationEnd }})],
+        {% endfor %}
+    {% for hammerOfWrathStart, hammerOfWrathEnd in zip(hammer_of_wrath_start_time_list, hammer_of_wrath_end_time_list) %}
+    ['Hammer of Wrath', 'Recharge', new Date({{ hammerOfWrathStart }}), new Date({{ hammerOfWrathEnd }})],
+        {% endfor %}
+    {% for shieldOfTheRighteousStart, shieldOfTheRighteousEnd in zip(shield_of_the_righteous_start_time_list, shield_of_the_righteous_end_time_list) %}
+    ['Shield of the Righteous', 'Recharge', new Date({{ shieldOfTheRighteousStart }}), new Date({{ shieldOfTheRighteousEnd }})],
+        {% endfor %}
+]);
+
+    var options = {
+        timeline: {
+            colorByRowLabel: true, showBarLabels: false, rowLabelStyle: { color: '#FFFFFF' },
+            barLabelStyle: { color: '#FFFFFF' }
+        },
+        backgroundColor: '#343a40',
+        hAxis: {
+            format: 'mm:ss'
+        }
+    };
+    google.visualization.events.addListener(chart, 'ready', function () {
+        var labels = container.getElementsByTagName('text');
+        Array.prototype.forEach.call(labels, function (label) {
+            if (label.getAttribute('text-anchor') === 'middle') {
+                label.setAttribute('fill', '#FFFFFF');
+            }
+        });
+    });
+    chart.draw(dataTable, options);
+}
+</script>
+{% endblock %}

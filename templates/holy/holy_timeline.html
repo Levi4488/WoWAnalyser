@@ -1,0 +1,119 @@
+{% extends "shared/layout.html" %}
+
+{% block title %}Holy Paladin Timeline{% endblock %}
+{% block content %}
+<div class="container mt-3">
+    <div class="row border-bottom pb-3">
+      <div class="col text-start">
+        <h6>{{boss_difficulty}}</h6>
+        <h2 class="text-warning">{{boss_name}}</h2>
+      </div>
+      <div class="col text-end">
+        <h6>{{player_spec}} {{player_type}} <img src="/static/img/spell_holy_holybolt.jpg" id="thumbnail"></h6>
+        <h2 class="text-warning">{{player_name}}</h2>
+      </div>
+    </div>
+  </div>
+  
+<div class="container mt-3 border-bottom pb-3">
+    <ul class="nav nav-pills nav-fill">
+        <li class="nav-item">
+            <a class="nav-link link-light" href="/holy-overview">Overview</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link link-light" href="/holy-statistics">Statistics</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active text-bg-warning" aria-current="page" href="/holy-timeline">Timeline</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link link-light" href="/holy-character">Character</a>
+        </li>
+    </ul>
+</div>
+
+<div class="container mt-3">
+    <div id="visualization">
+    </div>
+</div>
+
+<script type="text/javascript">
+    // DOM element where the Timeline will be attached
+    var container = document.getElementById('visualization');
+
+    // Create a DataSet (allows two way data-binding)
+    var items = new vis.DataSet([
+        {% for names, timestamps in zip(name_list, timestamp_list) %}
+    { content: '{{names}}', start: '{{timestamps}}', className: "charcoal" },
+    {% endfor %}
+    ]);
+
+    // Configuration for the Timeline
+    var options = {
+        showMajorLabels: false,
+        format: {
+            minorLabels: {
+                second: 'mm:ss',
+            }
+        },
+        maxHeight: '300px',
+    };
+
+    // Create a Timeline
+    var timeline = new vis.Timeline(container, items, options);
+</script>
+
+<div class="container mt-3" id="abilityTimeline" style="height: 400px;"></div>
+
+<script type="text/javascript">
+    google.charts.load("current", { packages: ["timeline"] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+
+        var container = document.getElementById('abilityTimeline');
+        var chart = new google.visualization.Timeline(container);
+        var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn({ type: 'string', id: 'Position' });
+        dataTable.addColumn({ type: 'string', id: 'Name' });
+        dataTable.addColumn({ type: 'date', id: 'Start' });
+        dataTable.addColumn({ type: 'date', id: 'End' });
+        dataTable.addRows([
+    {% for holyShockStart, holyShockEnd in zip(holy_shock_start_time_list, holy_shock_end_time_list) %}
+    ['Holy Shock', 'Cooldown', new Date({{ holyShockStart }}), new Date({{ holyShockEnd }})],
+        {% endfor %}
+    {% for holyLightStart, holyLightEnd in zip(holy_light_start_time_list, holy_light_end_time_list) %}
+    ['Holy Light', 'Cast Time', new Date({{ holyLightStart }}), new Date({{ holyLightEnd }})],
+        {% endfor %}
+    {% for flashOfLightStart, flashOfLightEnd in zip(flash_of_light_start_time_list, flash_of_light_end_time_list) %}
+    ['Flash of Light', 'Cast Time', new Date({{ flashOfLightStart }}), new Date({{ flashOfLightEnd }})],
+        {% endfor %}
+    {% for crusaderStrikeStart, crusaderStrikeEnd in zip(crusader_strike_start_time_list, crusader_strike_end_time_list) %}
+    ['Crusader Strike', 'Cooldown', new Date({{ crusaderStrikeStart }}), new Date({{ crusaderStrikeEnd }})],
+        {% endfor %}
+    {% for hammerOfWrathStart, hammerOfWrathEnd in zip(hammer_of_wrath_start_time_list, hammer_of_wrath_end_time_list) %}
+    ['Hammer of Wrath', 'Cooldown', new Date({{ hammerOfWrathStart }}), new Date({{ hammerOfWrathEnd }})],
+        {% endfor %}
+]);
+
+    var options = {
+        timeline: {
+            colorByRowLabel: true, showBarLabels: false, rowLabelStyle: { color: '#FFFFFF' },
+            barLabelStyle: { color: '#FFFFFF' }
+        },
+        backgroundColor: '#343a40',
+        hAxis: {
+            format: 'mm:ss'
+        }
+    };
+    google.visualization.events.addListener(chart, 'ready', function () {
+        var labels = container.getElementsByTagName('text');
+        Array.prototype.forEach.call(labels, function (label) {
+            if (label.getAttribute('text-anchor') === 'middle') {
+                label.setAttribute('fill', '#FFFFFF');
+            }
+        });
+    });
+    chart.draw(dataTable, options);
+}
+</script>
+{% endblock %}

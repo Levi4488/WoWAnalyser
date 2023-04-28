@@ -1,0 +1,132 @@
+#card-color {
+    background-color: #343a40;
+    color: white;
+}
+
+#thumbnail {
+    width: 25px;
+    height: 25px;
+}
+
+#death-knight {
+    color: #C41E3A;
+}
+
+#demon-hunter {
+    color: #A330C9;
+}
+
+#druid {
+    color: #FF7C0A;
+}
+
+#evoker {
+    color: #33937F;
+}
+
+#hunter {
+    color: #AAD372;
+}
+
+#mage {
+    color: #3FC7EB;
+}
+
+#monk {
+    color: #00FF98;
+}
+
+#paladin {
+    color: #F48CBA;
+}
+
+#priest {
+    color: #FFFFFF;
+}
+
+#rogue {
+    color: #FFF468;
+}
+
+#shaman {
+    color: #0070DD;
+}
+
+#warlock {
+    color: #8788EE;
+}
+
+#warrior {
+    color: #C69B6D;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(0, 0, 0, .125);
+    outline: none;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #212529;
+}
+
+.accordion-button:after {
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffc107'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>") !important;
+}
+
+#accordion-header-progress-bar {
+    position: absolute;
+    right: 0;
+    margin-right: 6em;
+    width: 300px;
+}
+
+#icon {
+    color: #ffc107;
+    font-size: 24px;
+    margin-bottom: 0.5rem;
+}
+
+#progress-bar {
+    width: 150px;
+}
+
+#table-progress-bar {
+    width: 200px;
+}
+
+#card-progress-bar {
+    background-color: #212529;
+}
+
+.vis-item.charcoal {
+    background-color: #343a40;
+    border-color: #343a40;
+    color: white;
+}
+
+.vis-time-axis .vis-text.vis-minor {
+    color: white;
+}
+
+#content {
+    position: relative;
+    min-height: 100vh;
+}
+
+#content-wrap {
+    padding-bottom: 3.5rem;
+    /* Footer height */
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    height: 3.5rem;
+    /* Footer height */
+}
+
+#visualization {
+    height: 300px;
+    border: 1px solid #FFFFFF;
+}

@@ -1,0 +1,134 @@
+{% extends "shared/layout.html" %}
+
+{% block title %}Player Selection{% endblock %}
+{% block content %}
+<div class="container text-center mt-3">
+  <div class="row">
+    <div class="col text-start">
+      <h3><a href="/boss-selection" class="text-decoration-none text-warning">GO BACK</a></h3>
+    </div>
+    <div class="col">
+      <h1 class="text-center text-warning">Player Selection</h1>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+
+<div class="container text-center">
+  <div class="row">
+    <div class="col text-start">
+      <h6>{{boss_difficulty}}</h6>
+      <h3>{{boss_name}} - {{time}}</h3>
+    </div>
+    <div class="col text-end">
+      <h6>Average Item Level: {{average_item_level}}</h6>
+      <h6>Tank: {{tank_tally}} Healer: {{healer_tally}} DPS: {{dps_tally}}</h6>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-3 mb-3">
+  <div class="row row-cols-1 row-cols-md-5 g-4">
+    {% for playerName,sourceId,playerType,playerSpec,playerItemLevel,playerPotionUse,playerHealthstoneUse in zip
+    (name_list,id_list,type_list,spec_list,item_level_list,potion_use_list,healthstone_use_list) %}
+    <div class="col">
+      <div class="card" id="card-color" style="max-width: 18rem;">
+        {% if playerType == 'DeathKnight' %}
+        <img src="/static/img/Death_Knight_Crest.png" class="card-img-top">
+        {% endif %}
+        {% if playerType == 'DemonHunter' %}
+        <img src="/static/img/Demon_Hunter_Crest.png" class="card-img-top">
+        {% endif %}
+        {% if playerType == 'Druid' %}
+        <img src="/static/img/Druid_Crest.png" class="card-img-top">
+        {% endif %}
+        {% if playerType == 'Evoker' %}
+        <img src="/static/img/Dracthyr_Crest.png" class="card-img-top">
+        {% endif %}
+        {% if playerType == 'Hunter' %}
+        <img src="/static/img/Hunter_Crest.png" class="card-img-top">
+        {% endif %}
+        {% if playerType == 'Mage' %}
+        <img src="/static/img/Mage_Crest.png" class="card-img-top">
+        {% endif %}
+        {% if playerType == 'Monk' %}
+        <img src="/static/img/Pandaren_Crest.png" class="card-img-top">
+        {% endif %}
+        {% if playerType == 'Paladin' %}
+        <img src="/static/img/Paladin_Crest.png" class="card-img-top">
+        {% endif %}
+        {% if playerType == 'Priest' %}
+        <img src="/static/img/Priest_Crest.png" class="card-img-top">
+        {% endif %}
+        {% if playerType == 'Rogue' %}
+        <img src="/static/img/Rogue_Crest.png" class="card-img-top">
+        {% endif %}
+        {% if playerType == 'Shaman' %}
+        <img src="/static/img/Shaman_Crest.png" class="card-img-top">
+        {% endif %}
+        {% if playerType == 'Warlock' %}
+        <img src="/static/img/Warlock_Crest.png" class="card-img-top">
+        {% endif %}
+        {% if playerType == 'Warrior' %}
+        <img src="/static/img/Warrior_Crest.png" class="card-img-top">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{playerName}}</h5>
+          {% if playerType == 'DeathKnight' %}
+          <p class="card-text" id="death-knight">{{playerSpec}} {{playerType}}</p>
+          {% endif %}
+          {% if playerType == 'DemonHunter' %}
+          <p class="card-text" id="demon-hunter">{{playerSpec}} {{playerType}}</p>
+          {% endif %}
+          {% if playerType == 'Druid' %}
+          <p class="card-text" id="druid">{{playerSpec}} {{playerType}}</p>
+          {% endif %}
+          {% if playerType == 'Evoker' %}
+          <p class="card-text" id="evoker">{{playerSpec}} {{playerType}}</p>
+          {% endif %}
+          {% if playerType == 'Hunter' %}
+          <p class="card-text" id="hunter">{{playerSpec}} {{playerType}}</p>
+          {% endif %}
+          {% if playerType == 'Mage' %}
+          <p class="card-text" id="mage">{{playerSpec}} {{playerType}}</p>
+          {% endif %}
+          {% if playerType == 'Monk' %}
+          <p class="card-text" id="monk">{{playerSpec}} {{playerType}}</p>
+          {% endif %}
+          {% if playerType == 'Paladin' %}
+          <p class="card-text" id="paladin">{{playerSpec}} {{playerType}}</p>
+          {% endif %}
+          {% if playerType == 'Priest' %}
+          <p class="card-text" id="priest">{{playerSpec}} {{playerType}}</p>
+          {% endif %}
+          {% if playerType == 'Rogue' %}
+          <p class="card-text" id="rogue">{{playerSpec}} {{playerType}}</p>
+          {% endif %}
+          {% if playerType == 'Shaman' %}
+          <p class="card-text" id="shaman">{{playerSpec}} {{playerType}}</p>
+          {% endif %}
+          {% if playerType == 'Warlock' %}
+          <p class="card-text" id="warlock">{{playerSpec}} {{playerType}}</p>
+          {% endif %}
+          {% if playerType == 'Warrior' %}
+          <p class="card-text" id="warrior">{{playerSpec}} {{playerType}}</p>
+          {% endif %}
+          <p class="card-text">{{playerItemLevel}}</p>
+          <form method='POST' action="/player-selection">
+            <input type="hidden" id="sourceId" name="sourceId" value={{sourceId}}>
+            <input type="hidden" id="playerName" name="playerName" value="{{playerName}}">
+            <input type="hidden" id="playerType" name="playerType" value="{{playerType}}">
+            <input type="hidden" id="playerSpec" name="playerSpec" value="{{playerSpec}}">
+            <input type="hidden" id="playerItemLevel" name="playerItemLevel" value="{{playerItemLevel}}">
+            <input type="hidden" id="playerPotionUse" name="playerPotionUse" value="{{playerPotionUse}}">
+            <input type="hidden" id="playerHealthstoneUse" name="playerHealthstoneUse" value="{{playerHealthstoneUse}}">
+            <button type="submit" class="btn btn-outline-warning">Select</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

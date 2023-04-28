@@ -1,0 +1,191 @@
+{% extends "shared/layout.html" %}
+
+{% block title %}Retribution Paladin Character{% endblock %}
+{% block content %}
+<div class="container mt-3">
+    <div class="row border-bottom pb-3">
+        <div class="col text-start">
+            <h6>{{boss_difficulty}}</h6>
+            <h2 class="text-warning">{{boss_name}}</h2>
+        </div>
+        <div class="col text-end">
+            <h6>{{player_spec}} {{player_type}} <img src="/static/img/paladin_retribution.jpg" id="thumbnail"></h6>
+            <h2 class="text-warning">{{player_name}}</h2>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-3 border-bottom pb-3">
+    <ul class="nav nav-pills nav-fill">
+        <li class="nav-item">
+            <a class="nav-link link-light" href="/retribution-overview">Overview</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link link-light" href="/retribution-statistics">Statistics</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link link-light" href="/retribution-timeline">Timeline</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active text-bg-warning" aria-current="page" href="/retribution-character">Character</a>
+        </li>
+    </ul>
+</div>
+
+<div class="container text-center mt-3">
+    <div class="row">
+        <div class="col-2">
+            <div class="card mb-3" id="card-color">
+                <div class="card-body">
+                    <h6>HELM</h6>
+                    <p>{{helm}}</p>
+                    <p>{{helm_itemlvl}}</p>
+                </div>
+            </div>
+            <div class="card mb-3" id="card-color">
+                <div class="card-body">
+                    <h6>NECK</h6>
+                    <p>{{neck}}</p>
+                    <p>{{neck_itemlvl}}</p>
+                </div>
+            </div>
+            <div class="card mb-3" id="card-color">
+                <div class="card-body">
+                    <h6>SHOULDERS</h6>
+                    <p>{{shoulders}}</p>
+                    <p>{{shoulders_itemlvl}}</p>
+                </div>
+            </div>
+            <div class="card mb-3" id="card-color">
+                <div class="card-body">
+                    <h6>CLOAK</h6>
+                    <p>{{cloak}}</p>
+                    <p>{{cloak_itemlvl}}</p>
+                </div>
+            </div>
+            <div class="card mb-3" id="card-color">
+                <div class="card-body">
+                    <h6>CHEST</h6>
+                    <p>{{chest}}</p>
+                    <p>{{chest_itemlvl}}</p>
+                </div>
+            </div>
+            <div class="card" id="card-color">
+                <div class="card-body">
+                    <h6>WRISTS</h6>
+                    <p>{{wrists}}</p>
+                    <p>{{wrists_itemlvl}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 text-center">
+            <h3 class="text-warning">{{player_name}}</h3>
+            <p>{{player_type}}</p>
+            <p><strong>Average ilvl:</strong> {{player_itemlvl}}</p>
+            <img src="/static/img/Paladin_Crest.png">
+            <div class="card mx-auto mt-3" id="card-color" style="width: fit-content;">
+                <div class="card-body">
+                    <h6>WEAPON</h6>
+                    <p>{{weapon}}</p>
+                    <p>{{weapon_itemlvl}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="card mb-3" id="card-color">
+                <div class="card-body">
+                    <h6>GLOVES</h6>
+                    <p>{{gloves}}</p>
+                    <p>{{gloves_itemlvl}}</p>
+                </div>
+            </div>
+            <div class="card mb-3" id="card-color">
+                <div class="card-body">
+                    <h6>BELT</h6>
+                    <p>{{belt}}</p>
+                    <p>{{belt_itemlvl}}</p>
+                </div>
+            </div>
+            <div class="card mb-3" id="card-color">
+                <div class="card-body">
+                    <h6>LEGGUARDS</h6>
+                    <p>{{legguards}}</p>
+                    <p>{{legguards_itemlvl}}</p>
+                </div>
+            </div>
+            <div class="card mb-3" id="card-color">
+                <div class="card-body">
+                    <h6>BOOTS</h6>
+                    <p>{{boots}}</p>
+                    <p>{{boots_itemlvl}}</p>
+                </div>
+            </div>
+            <div class="card mb-3" id="card-color">
+                <div class="card-body">
+                    <h6>RING1</h6>
+                    <p>{{ring1}}</p>
+                    <p>{{ring1_itemlvl}}</p>
+                </div>
+            </div>
+            <div class="card mb-3" id="card-color">
+                <div class="card-body">
+                    <h6>RING2</h6>
+                    <p>{{ring2}}</p>
+                    <p>{{ring2_itemlvl}}</p>
+                </div>
+            </div>
+            <div class="card mb-3" id="card-color">
+                <div class="card-body">
+                    <h6>TRINKET1</h6>
+                    <p>{{trinket1}}</p>
+                    <p>{{trinket1_itemlvl}}</p>
+                </div>
+            </div>
+            <div class="card" id="card-color">
+                <div class="card-body">
+                    <h6>TRINKET2</h6>
+                    <p>{{trinket2}}</p>
+                    <p>{{trinket2_itemlvl}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 text-start">
+            <h4>Stats on pull</h4>
+            <div class="ms-4">
+                <h6>STRENGTH</h6>
+                <p>{{strength}}</p>
+                <h6>STAMINA</h6>
+                <p>{{stamina}}</p>
+                <h6>CRITICAL STRIKE</h6>
+                <p>{{crit}}</p>
+                <h6>HASTE</h6>
+                <p>{{haste}}</p>
+                <h6>MASTERY</h6>
+                <p>{{mastery}}</p>
+                <h6>VERSATILITY</h6>
+                <p>{{versatility}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-8">
+            <h6 class="border-bottom">TALENTS</h6>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            {% for talentTree in talent_tree_list %}
+            <p>{{talentTree}}</p>
+            {% endfor %}
+        </div>
+        <div class="col-4 text-end">
+            {% for rank in rank_list %}
+            <p>{{rank}}</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
